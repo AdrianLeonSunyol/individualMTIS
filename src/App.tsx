@@ -1,26 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { Switch, Route } from 'react-router-dom';
+import NavBar from './components/NavBar';
+import { ApiService } from './services/ApiService';
+import { HomeComponent, EmpleadoComponent, BpelComponent, SeguridadComponent } from './components';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+declare var M: any;
+
+export interface IAppState {
+  service: ApiService;
 }
 
-export default App;
+export default class App extends React.Component<{}, IAppState> {
+  constructor(props: any) {
+    super(props);
+
+    this.state = {
+      service: new ApiService()
+    }
+  }
+
+  componentDidMount() {
+    M.AutoInit();
+  }
+
+  render() {
+    return (
+      <div>
+        <NavBar />
+        <div className="center">
+          {
+            <Switch>
+              <Route exact path="/" component={HomeComponent} />
+              <Route exact path="/bepl" render={() => <BpelComponent service={this.state.service} />} />
+              <Route exact path="/seguridad" render={() => <SeguridadComponent service={this.state.service} />} />
+              <Route exact path="/empleado" render={() => <EmpleadoComponent service={this.state.service} />} />
+            </Switch>
+          }
+        </div>
+      </div>
+    );
+  }
+}
+
