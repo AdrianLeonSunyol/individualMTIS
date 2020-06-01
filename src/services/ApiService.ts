@@ -1,4 +1,5 @@
 import { IEmployee } from "../models/IEmployee"
+import { resolve } from "dns";
 
 export class ApiService {
   constructor(
@@ -22,19 +23,39 @@ export class ApiService {
     });
   }
 
-  asignarPermisos = () => {
-
+  asignarPermisos = (nif: string, restKeySec: string, sala: string): Promise<any> => {
+    return new Promise<any>((resolve, reject) => {
+      resolve({
+        status: 200,
+        message: "Ok"
+      });
+    });
   }
 
-  eliminarPermisos = () => {
-
+  eliminarPermisos = (nif: string, restKeySec: string, sala: string): Promise<any> => {
+    return new Promise<any>((resolve, reject) => {
+      resolve({
+        status: 200,
+        message: "Ok"
+      });
+    });
   }
 
-  validarUsuario = () => {
-
+  validarUsuario = (nif: string, restKeySec: string, sala: string): Promise<any> => {
+    return new Promise<any>((resolve, reject) => {
+      resolve({
+        status: 200,
+        message: "Ok"
+      });
+    });
   }
 
-  verPermisos = () => {
-
+  verPermisos = (nif: string, restKeySec: string): Promise<any> => {
+    return new Promise<any>((resolve, reject) => {
+      resolve({
+        status: 200,
+        message: "Ok"
+      });
+    });
   }
 }
