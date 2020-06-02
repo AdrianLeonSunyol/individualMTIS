@@ -10,8 +10,13 @@ export class ApiService {
 
   }
 
-  bpel = () => {
-
+  bpel = (numeroUnidades: number, referenciaProducto: string): Promise<any> => {
+    return new Promise<any>((resolve, reject) => {
+      resolve({
+        status: 200,
+        message: "Ok"
+      });
+    });
   }
 
   createEmpleado = (empleado: IEmployee) => {

@@ -24,7 +24,7 @@ export class HomeComponent extends React.Component {
                     <p>Muesta del servicio orquestado con bpel.</p>
                   </div>
                   <div className="card-action">
-                    <a href="/bpel">Ver Servicio</a>
+                    <a href="/bepl">Ver Servicio</a>
                   </div>
                 </div>
               </div>
