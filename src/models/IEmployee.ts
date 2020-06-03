@@ -18,5 +18,9 @@ export interface IEmployeeCreateRequest {
 
 export interface IResponseCreate {
   status: number;
-  message: string;
+  error: string;
+  Employee: IEmployee,
+  actualizado?: boolean;
+  borrado?: boolean;
+  creado?: boolean;
 }

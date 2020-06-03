@@ -6,7 +6,9 @@ export interface ISeguridadRequest {
 }
 
 
-export interface IReserponseSeguridad {
-
+export interface IResponseSeguridad {
+  error: string;
+  status: number;
+  rooms: {nombre: string}[];
 }
 

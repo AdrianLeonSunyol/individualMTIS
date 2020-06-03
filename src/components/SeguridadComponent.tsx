@@ -1,12 +1,13 @@
 import React from 'react'
 import { IComponentProps } from './IComponentProps'
+import { IResponseSeguridad } from '../models/responseSeguridad';
 
 export interface ISeguridadComponentState {
   peticion: {
     nif: string;
     room: string;
   },
-  salas: string[];
+  salas: {nombre: string}[];
   restKeySec: string;
 }
 
@@ -38,12 +39,16 @@ export class SeguridadComponent extends React.Component<IComponentProps, ISeguri
         this.state.restKeySec,
         this.state.peticion.room
       )
-        .then((res) => {
-          console.log(res);
-          this._onResertFields();
+        .then((res: IResponseSeguridad) => {
+          M.toast({
+            html: res.error
+          });
+          this._updatePermisos();
         })
-        .catch((err) => {
-          console.log(err);
+        .catch((err: IResponseSeguridad) => {
+          M.toast({
+            html: err.error
+          });
         });
     }
   }
@@ -60,13 +65,18 @@ export class SeguridadComponent extends React.Component<IComponentProps, ISeguri
         this.state.restKeySec,
         this.state.peticion.room
       )
-        .then((res) => {
-          console.log(res);
-          this._onResertFields();
-        })
-        .catch((err) => {
-          console.log(err);
+      .then((res: IResponseSeguridad) => {
+        M.toast({
+          html: res.error
         });
+        this._updatePermisos();
+        //this._onResertFields();
+      })
+      .catch((err: IResponseSeguridad) => {
+        M.toast({
+          html: err.error
+        });
+      });
     }
   }
 
@@ -82,15 +92,20 @@ export class SeguridadComponent extends React.Component<IComponentProps, ISeguri
         this.state.restKeySec,
         this.state.peticion.room
       )
-        .then((res) => {
-          console.log(res);
-          this._onResertFields();
-        })
-        .catch((err) => {
-          console.log(err);
+      .then((res: IResponseSeguridad) => {
+        M.toast({
+          html: res.error
         });
+      })
+      .catch((err: IResponseSeguridad) => {
+        M.toast({
+          html: err.error
+        });
+      });
     }
   }
+
+
 
   _onVerPermisos = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
@@ -99,19 +114,32 @@ export class SeguridadComponent extends React.Component<IComponentProps, ISeguri
         html: "Por favor, cumplemente los datos requeridos [RestKey, Nif]"
       });
     } else {
-      await this.props.service.verPermisos(
-        this.state.peticion.nif,
-        this.state.restKeySec,
-      )
-        .then((res) => {
-          console.log(res);
-          this._onResertFields();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      await this._updatePermisos();
     }
   }
+
+  _updatePermisos = async () => {
+    await this.props.service.verPermisos(
+      this.state.peticion.nif,
+      this.state.restKeySec,
+    )
+    .then((res: IResponseSeguridad) => {
+      this.setState({
+        salas: res.rooms
+      });
+
+      M.toast({
+        html: res.error
+      });
+      //this._onResertFields();
+    })
+    .catch((err: IResponseSeguridad) => {
+      M.toast({
+        html: err.error
+      });
+    });
+  }
+
 
   _onResertFields = () => {
     this.setState({
@@ -190,7 +218,7 @@ export class SeguridadComponent extends React.Component<IComponentProps, ISeguri
                                   {
                                     this.state.salas.map((sala) => {
                                       return (
-                                        <li>sala.nombre</li>
+                                      <li>{sala.nombre}</li>
                                       )
                                     })
                                   }

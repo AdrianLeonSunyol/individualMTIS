@@ -1,5 +1,5 @@
 import React from 'react'
-import { IEmployee } from '../models/IEmployee'
+import { IEmployee, IResponseCreate } from '../models/IEmployee'
 import { IComponentProps } from './IComponentProps';
 
 export interface IEmployeeComponentState {
@@ -32,6 +32,10 @@ export class EmpleadoComponent extends React.Component<IComponentProps, IEmploye
     };
   }
 
+  componentWillMount() {
+    M.AutoInit();
+  }
+
   _isEmpty = (employee: IEmployee): boolean => {
     return (
       employee.apellidos == "" ||
@@ -56,16 +60,34 @@ export class EmpleadoComponent extends React.Component<IComponentProps, IEmploye
         html: "Por favor introduce los valos mínimos!"
       });
     } else {
-      console.log("vamos a registrar el empleado");
-      await this.props.service.createEmpleado(this.state.empleado)
-        .then((res) => {
+      var requestEmployee = {
+        Restkey: this.state.restKeySec,
+        Nif: this.state.empleado.nif,
+        Nombre: this.state.empleado.nombre,
+        Apellidos: this.state.empleado.apellidos,
+        Direccion: this.state.empleado.direccion,
+        Poblacion: this.state.empleado.poblacion,
+        Telefono: this.state.empleado.telefono,
+        Email: this.state.empleado.email,
+        FechaNacimiento: this.state.empleado.fechaNacimiento,
+        NumeroSeguridadSocial: this.state.empleado.numeroSeguridadSocial,
+        Iban: this.state.empleado.iban
+      }
+      await this.props.service.createEmpleado(requestEmployee)
+        .then((res: IResponseCreate) => {
           console.log(res);
+          M.toast({
+            html: res.error
+          });
           this.setState({
-            empleado: this.initEmployee
+            empleado: this.initEmployee,
           });
         })
-        .catch((err) => {
+        .catch((err: IResponseCreate) => {
           console.log(err);
+          M.toast({
+            html: err.error
+          });
         });
     }
   }
