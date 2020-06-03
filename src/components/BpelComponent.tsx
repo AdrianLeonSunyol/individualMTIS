@@ -37,16 +37,15 @@ export class BpelComponent extends React.Component<IComponentProps, IBpelCompone
     });
   }
 
-  _onComprarProducto = (event: React.MouseEvent<HTMLButtonElement>) => {
+  _onComprarProducto = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     if (this.state.bpel.numeroUnidades == 0 || this.state.bpel.referenciaProducto == "") {
       M.toast({
         html: "Por favor, introduzca los datos mínimos!"
       });
     } else {
-      this.props.service.bpel(this.state.bpel.numeroUnidades, this.state.bpel.referenciaProducto)
+      await this.props.service.bpel(this.state.bpel.numeroUnidades, this.state.bpel.referenciaProducto)
         .then((res) => {
-          console.log(res);
           M.toast({
             html: res.message
           });

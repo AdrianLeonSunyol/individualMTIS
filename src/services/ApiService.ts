@@ -1,11 +1,12 @@
 import { IResponseCreate } from "../models/IEmployee"
 import { IResponseSeguridad } from "../models/responseSeguridad";
+import { IResponseBPEL } from "../models/bpelModels";
 
 //"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --disable-web-security --disable-gpu --user-data-dir=~/chromeTemp
 
 export class ApiService {
   constructor(
-    private bpelURL: string = "http://localhost:9090",
+    private bpelURL: string = "http://localhost:9090/procesoCompra",
     private empleadoNewURL: string = "http://localhost:9091/empleado/nuevo",
     private empleadoSeguridadURL: string = "http://localhost:9092/api/seguridad"
   ) {
@@ -14,11 +15,32 @@ export class ApiService {
 
   bpel = (numeroUnidades: number, referenciaProducto: string): Promise<any> => {
     return new Promise<any>((resolve, reject) => {
-      resolve({
-        status: 200,
-        message: "Ok"
+      var url = new URL(`${this.bpelURL}`);
+         
+      fetch(url.toString(), {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          "numeroUnidades": numeroUnidades,
+          "referenciaProducto": referenciaProducto
+        })
+      })
+      .then((response) => {
+          console.log(response);
+          return response.json();
+        })
+        .then((res: IResponseBPEL) => {
+          if (res.status == 200)
+            resolve(res);
+          else
+            reject(res);
+        })
+        .catch((err: any) => {
+          console.log(err);
+        });
       });
-    });
   }
 
   OBJtoXML = (obj: any) => {
